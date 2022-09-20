@@ -45,8 +45,8 @@ const App = () => {
   const addFeedbackToCategory = (category, setCategory) => setCategory(category + 1)
   const addFeedback = () => setTotalNum(totalNum + 1)
 
-  const average = ((good - bad)/totalNum)
-  const positiveFeedbacks = (good/totalNum*100)
+  const average = parseFloat((good - bad)/totalNum).toFixed(2)
+  const positiveFeedbacks = parseFloat(good/totalNum*100).toFixed(2) + "%" 
 
 
   const feedbackGood = () => {
