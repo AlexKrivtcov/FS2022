@@ -8,6 +8,20 @@ const Button = (props) => {
     </button>
   )
 }
+const Anecdote = (props) => {
+  return (
+    <p>
+      {props.anecdotes[props.selected]}
+    </p>
+  )
+}
+const AnecdoteScore = (props) => {
+  return (
+    <p>
+      has {props.points[props.selected]} votes
+    </p>
+  )
+}
 
 const App = () => {
   const anecdotes = [
@@ -21,22 +35,31 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(new Array(anecdotes.length).fill(0))
 
+  // random selection of the array element
   function getRandomInt(max) {
     return Math.floor(Math.random() * max)
   }
-
+  console.log("current points array", points)
   
-
   const nextAnecdote = () => {
     setSelected(getRandomInt(anecdotes.length))
   }
-  console.log(selected)
+  const vote = () => {
+    const copy = [...points]
+    copy[selected] += 1
+    setPoints(copy)
+  }  
+
+  console.log("selected", selected)
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <Button onClick={nextAnecdote} text="Next anecdote" />
+      <Anecdote anecdotes={anecdotes} selected={selected}/>
+      <AnecdoteScore points={points} selected={selected}/>
+      <Button onClick={vote} text="vote" />
+      <Button onClick={nextAnecdote} text="Next anecdote" />     
     </div>
   )
 }
