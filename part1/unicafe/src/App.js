@@ -5,18 +5,33 @@ const Button = ({ onClick, text }) => (
     {text}
   </button>
 )
-
+const StatisticLine = (props) => {
+  return (
+    <div>
+      {props.text} {props.value}
+    </div>
+  )
+}
 const Statistics = (props) => {
   if (props.totalNum > 0){
     return(
-      <ul>
-        <li>good {props.good}</li>
-        <li>neutral {props.neutral}</li>
-        <li>bad {props.bad}</li>
-        <li>amount of feedbacks {props.totalNum}</li>
-        <li>average score {props.average}</li>
-        <li>positive feedbacks {props.positiveFeedbacks} %</li>
-      </ul>
+      <div>
+        <StatisticLine text="good" value={props.good}/>
+        <StatisticLine text="neutral" value={props.neutral}/>
+        <StatisticLine text="bad" value={props.bad}/>
+        <StatisticLine text="amount of feedbacks" value={props.totalNum}/>
+        <StatisticLine text="average score" value={props.average}/>
+        <StatisticLine text="positive feedbacks" value={props.positiveFeedbacks}/>
+
+      </div>
+      // <ul>
+      //   <li>good {props.good}</li>
+      //   <li>neutral {props.neutral}</li>
+      //   <li>bad {props.bad}</li>
+      //   <li>amount of feedbacks {props.totalNum}</li>
+      //   <li>average score {props.average}</li>
+      //   <li>positive feedbacks {props.positiveFeedbacks} %</li>
+      // </ul>
     )
   }
   return (
@@ -31,7 +46,7 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-  const[totalNum, setTotalNum] = useState(0)
+  const [totalNum, setTotalNum] = useState(0)
 
   const addFeedbackToCategory = (category, setCategory) => setCategory(category + 1)
   const addFeedback = () => setTotalNum(totalNum + 1)
