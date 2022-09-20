@@ -7,31 +7,25 @@ const Button = ({ onClick, text }) => (
 )
 const StatisticLine = (props) => {
   return (
-    <div>
-      {props.text} {props.value}
-    </div>
+    <tr>
+      <td>{props.text}</td> 
+      <td>{props.value}</td>
+    </tr>
   )
 }
 const Statistics = (props) => {
   if (props.totalNum > 0){
     return(
-      <div>
-        <StatisticLine text="good" value={props.good}/>
-        <StatisticLine text="neutral" value={props.neutral}/>
-        <StatisticLine text="bad" value={props.bad}/>
-        <StatisticLine text="amount of feedbacks" value={props.totalNum}/>
-        <StatisticLine text="average score" value={props.average}/>
-        <StatisticLine text="positive feedbacks" value={props.positiveFeedbacks}/>
-
-      </div>
-      // <ul>
-      //   <li>good {props.good}</li>
-      //   <li>neutral {props.neutral}</li>
-      //   <li>bad {props.bad}</li>
-      //   <li>amount of feedbacks {props.totalNum}</li>
-      //   <li>average score {props.average}</li>
-      //   <li>positive feedbacks {props.positiveFeedbacks} %</li>
-      // </ul>
+      <table>
+        <tbody>
+          <StatisticLine text="good" value={props.good}/>
+          <StatisticLine text="neutral" value={props.neutral}/>
+          <StatisticLine text="bad" value={props.bad}/>
+          <StatisticLine text="amount of feedbacks" value={props.totalNum}/>
+          <StatisticLine text="average score" value={props.average}/>
+          <StatisticLine text="positive feedbacks" value={props.positiveFeedbacks}/>
+        </tbody>
+      </table>
     )
   }
   return (
