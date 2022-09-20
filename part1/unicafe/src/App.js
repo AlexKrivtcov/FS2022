@@ -12,15 +12,32 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const[totalNum, setTotalNum] = useState(0)
+
+  const addFeedbackToCategory = (category, setCategory) => setCategory(category + 1)
+
+  const addFeedback = () => setTotalNum(totalNum + 1)
+
+  const average = ((good - bad)/totalNum)
+  const positiveFeedbacks = (good/totalNum*100)
+
+
   const feedbackGood = () => {
-    setGood(good + 1)
+    addFeedback()
+    addFeedbackToCategory(good, setGood) 
   }
+  
   const feedbackNeutral = () => {
-    setNeutral(neutral + 1)
+    addFeedback()
+    addFeedbackToCategory(neutral, setNeutral)
+    
   }
   const feedbackBad = () => {
-    setBad(bad + 1)
+    addFeedback()
+    addFeedbackToCategory(bad, setBad)
   }
+  
+  
 
   return (
     <div>
@@ -33,6 +50,9 @@ const App = () => {
         <li>good {good}</li>
         <li>neutral {neutral}</li>
         <li>bad {bad}</li>
+        <li>amount of feedbacks {totalNum}</li>
+        <li>average score {average}</li>
+        <li>positive feedbacks {positiveFeedbacks} %</li>
       </ul>
     </div>
   )
