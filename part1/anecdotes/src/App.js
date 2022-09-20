@@ -10,18 +10,43 @@ const Button = (props) => {
 }
 const Anecdote = (props) => {
   return (
-    <p>
-      {props.anecdotes[props.selected]}
-    </p>
+    <div>
+      <h2>Anecdote of the day</h2>
+      <p>
+        {props.anecdotes[props.selected]}
+      </p>
+    </div>
+    
   )
 }
+
 const AnecdoteScore = (props) => {
   return (
     <p>
-      has {props.points[props.selected]} votes
+      has <b>{props.points[props.selected]}</b> votes
     </p>
   )
 }
+
+const BestAnecdote = (props) => {
+  const maxVote = Math.max(...props.points)
+  const maxVotePosition = props.points.indexOf(maxVote)
+  //console.log("max vote number is", maxVote)
+  //console.log("position of the max number votes in array", maxVotePosition)
+
+  if (maxVote > 0) {
+    return(
+      <div>
+        <p>{props.anecdotes[maxVotePosition]}</p>
+        <AnecdoteScore points={props.points} selected={maxVotePosition}/>
+      </div>
+    )
+  }
+  return (
+    <div>There is no votes yet</div>
+  ) 
+}
+
 
 const App = () => {
   const anecdotes = [
@@ -41,7 +66,7 @@ const App = () => {
   function getRandomInt(max) {
     return Math.floor(Math.random() * max)
   }
-  console.log("current points array", points)
+  //console.log("current points array", points)
   
   const nextAnecdote = () => {
     setSelected(getRandomInt(anecdotes.length))
@@ -52,14 +77,17 @@ const App = () => {
     setPoints(copy)
   }  
 
-  console.log("selected", selected)
+  //console.log("selected anecdote in position", selected)
 
   return (
     <div>
+
       <Anecdote anecdotes={anecdotes} selected={selected}/>
       <AnecdoteScore points={points} selected={selected}/>
       <Button onClick={vote} text="vote" />
-      <Button onClick={nextAnecdote} text="Next anecdote" />     
+      <Button onClick={nextAnecdote} text="Next anecdote" />  
+      <h2>Anecdote with most votes</h2>   
+      <BestAnecdote points={points} anecdotes={anecdotes}/>
     </div>
   )
 }
