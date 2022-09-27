@@ -3,24 +3,44 @@ import { useState } from 'react'
 
 
 const Person = ({person}) => <tr><td>{person.name}</td><td>{person.number}</td></tr>
-const Persons = ({persons}) => {
-  return (
-    <table>
-      <tbody>
-        {persons.map(person => <Person key={person.id} person={person}/>)}
-      </tbody>
-    </table>
-  )
+
+
+const Persons = ({persons, showAll, filterName}) => {
+   
+  if (showAll) {
+    return (
+      <table>
+        <tbody>
+          {persons.map(person => <Person key={person.id} person={person}/>)}
+        </tbody>
+      </table>
+    )
+  }
+  else {
+    const peopleToShow = persons.filter(person => person.name.toLowerCase().includes(filterName.toLowerCase()))
+    return (
+      <table>
+        <tbody>
+          {peopleToShow.map(person => <Person key={person.id} person={person}/>)}
+        </tbody>
+      </table>
+    )
+  }
 }
+
 
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      id: 1 }
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [showAll, setShowAll] = useState(true)
+  const [filterName, setFilterName] = useState('')
 
   const addName = (event) => {
     event.preventDefault()
@@ -49,6 +69,11 @@ const App = () => {
       setPersons(persons.concat(newPerson))
       setNewNumber('')
       setNewName('')
+      // show only added contact
+      // setFilterName(newName)
+      // setShowAll(false)
+      setShowAll(true)
+      setFilterName('')
     }
     
   }
@@ -62,10 +87,34 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleFilterChange = (event) => {
+    console.log('filter changed to ', event.target.value)
+    setFilterName(event.target.value)
+    console.log('show all', showAll) 
+    if (filterName.length === 0) { 
+      setShowAll(false)
+    }
+
+  }
+  const handleResetSearch = (event) =>{
+    setShowAll(true)
+    setFilterName('')
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        <label htmlFor='peopleFilter'>Filter shown with</label>
+        <input 
+          type="text" 
+          id="peopleFilter" 
+          onChange={handleFilterChange} 
+          value={filterName}/>
+          <button type="button" onClick={handleResetSearch}>clear search</button>
+      </div>
       <form onSubmit={addName}>
+        <h2>Add a new contact</h2>
         <div>
           <label htmlFor="newName">name: </label>
           <input 
@@ -87,7 +136,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <Persons persons={persons}/>
+      <Persons persons={persons} showAll={showAll} filterName={filterName}/>
     </div>
     
   )
