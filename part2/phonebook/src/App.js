@@ -1,34 +1,7 @@
 import { useState } from 'react'
-
-
-
-const Person = ({person}) => <tr><td>{person.name}</td><td>{person.number}</td></tr>
-
-
-const Persons = ({persons, showAll, filterName}) => {
-   
-  if (showAll) {
-    return (
-      <table>
-        <tbody>
-          {persons.map(person => <Person key={person.id} person={person}/>)}
-        </tbody>
-      </table>
-    )
-  }
-  else {
-    const peopleToShow = persons.filter(person => person.name.toLowerCase().includes(filterName.toLowerCase()))
-    return (
-      <table>
-        <tbody>
-          {peopleToShow.map(person => <Person key={person.id} person={person}/>)}
-        </tbody>
-      </table>
-    )
-  }
-}
-
-
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -90,7 +63,7 @@ const App = () => {
   const handleFilterChange = (event) => {
     console.log('filter changed to ', event.target.value)
     setFilterName(event.target.value)
-    console.log('show all', showAll) 
+
     if (filterName.length === 0) { 
       setShowAll(false)
     }
@@ -104,37 +77,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        <label htmlFor='peopleFilter'>Filter shown with</label>
-        <input 
-          type="text" 
-          id="peopleFilter" 
-          onChange={handleFilterChange} 
-          value={filterName}/>
-          <button type="button" onClick={handleResetSearch}>clear search</button>
-      </div>
-      <form onSubmit={addName}>
-        <h2>Add a new contact</h2>
-        <div>
-          <label htmlFor="newName">name: </label>
-          <input 
-            id="newName" 
-            onChange={handleNameChange}
-            value={newName}
-            type="text"/>
-        </div>
-        <div>
-          <label htmlFor="newNumber">number: </label>
-          <input 
-            id="newNumber" 
-            onChange={handleNumberChange}
-            value={newNumber}
-            type="tel"/>
-        </div>
-        <div>
-          <button type="submit" disabled={Boolean(!newName)} >add</button>
-        </div>
-      </form>
+      <Filter handleFilterChange={handleFilterChange}
+        handleResetSearch={handleResetSearch}
+        filterName={filterName}/>
+      <PersonForm 
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        newName={newName}
+        newNumber={newNumber}
+        addName={addName}/>
       <h2>Numbers</h2>
       <Persons persons={persons} showAll={showAll} filterName={filterName}/>
     </div>
