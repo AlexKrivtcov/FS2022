@@ -21,7 +21,7 @@ const Country = ({country, singleCountry}) => {
   const [displayExtra, setDisplayExtra] = useState(singleCountry)
   const stateExtra = displayExtra ? "block" : "none"
   const stateGeneral = singleCountry ? "none" : "block"
-
+  
   const handleShowCountry = (event) => {
     setDisplayExtra(!displayExtra)
   }
@@ -34,6 +34,9 @@ const Country = ({country, singleCountry}) => {
         <span>
           <button type="button" onClick={handleShowCountry}>
             {!displayExtra ? "Show information" : "Hide iformation"}
+            {
+              console.log("Weather request")
+            }
             </button>
         </span>
       </p>
@@ -51,12 +54,41 @@ const Country = ({country, singleCountry}) => {
         <div>
           <img src={country.flags.png} alt={country.name.official}/>
         </div>
+        <Weather country={country}/>
+        <hr/>
       </div>
     </div>
     
   )
 }
+const Weather = ({country}) => {
+  const [weatherCountry, setWeatherCountry] = useState({})
+  const api_key = process.env.REACT_APP_API_KEY
+  const countryCode = country.cca2
+  const countryCapital = country.capital
+  const weatherHook = () => {
 
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?q=${countryCapital},${countryCode}&appid=${api_key}&units=metric`)
+      .then(response => {
+        console.log('forecast received', response.data)
+        setWeatherCountry(response.data)
+      })
+  }
+  
+  useEffect(weatherHook, [])
+  //Show weather only if there is a response data
+  if (weatherCountry.cod === 200 ) {
+    return (
+      <div>
+        <h3>Weather in {weatherCountry.name}</h3>
+        <p>Current temperature is {weatherCountry.main.temp} Celcius</p>
+        <p><img src={`http://openweathermap.org/img/wn/${weatherCountry.weather[0].icon}@2x.png`} alt={weatherCountry.weather[0].main}/></p>
+        <p>Wind {weatherCountry.wind.speed} m/s</p>
+      </div>
+    )
+  }
+}
 
 const SearchResult = ({filterName, countries}) =>{
   if (filterName) {
@@ -89,9 +121,13 @@ const SearchResult = ({filterName, countries}) =>{
     else if (countriesToShow.length === 1) {
       const country = countriesToShow[0]
       const singleCountry = true
-      
+      {console.log("Weather request2")}
       return (
-        <Country country={country} singleCountry={singleCountry}/>
+        <>
+          <Country country={country} singleCountry={singleCountry}/>
+          {/* <Weather country={country}/> */}
+        </>
+        
       )
     }
     else if (countriesToShow.length === 0){
