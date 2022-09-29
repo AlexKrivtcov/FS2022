@@ -13,6 +13,51 @@ const Filter = ({handleFilterChange}) => {
     </div>
     )
 }
+const Country = ({country, singleCountry}) => {
+  const keys = Object.keys(country.languages)
+  //console.log("keys: ", keys)
+  //console.log(country.languages)
+  
+  const [displayExtra, setDisplayExtra] = useState(singleCountry)
+  const stateExtra = displayExtra ? "block" : "none"
+  const stateGeneral = singleCountry ? "none" : "block"
+
+  const handleShowCountry = (event) => {
+    setDisplayExtra(!displayExtra)
+  }
+  return (
+    <div>
+      <p style={{display: stateGeneral}}>
+        <span>
+          {country.name.official} (common name: {country.name.common})
+        </span>
+        <span>
+          <button type="button" onClick={handleShowCountry}>
+            {!displayExtra ? "Show information" : "Hide iformation"}
+            </button>
+        </span>
+      </p>
+      <div style={{display: stateExtra}}>
+        <h2>{country.name.official}</h2>
+        <p>The capital: {country.capital}</p>
+        <p>Total area: {country.area}</p>
+        <h3>Languages:</h3>
+        <ul>
+          {keys.map(
+            key => 
+            <li key={key}>{country.languages[key]}</li>
+          )}  
+        </ul>
+        <div>
+          <img src={country.flags.png} alt={country.name.official}/>
+        </div>
+      </div>
+    </div>
+    
+  )
+}
+
+
 const SearchResult = ({filterName, countries}) =>{
   if (filterName) {
     const countriesToShow = countries.filter(country => 
@@ -20,7 +65,7 @@ const SearchResult = ({filterName, countries}) =>{
       ||
       country.name.common.toLowerCase().includes(filterName.toLowerCase())
       )
-    console.log(countriesToShow)
+    //console.log(countriesToShow)
     console.log("countries found: ", countriesToShow.length)
     if (countriesToShow.length > 10) {
       return (
@@ -31,36 +76,29 @@ const SearchResult = ({filterName, countries}) =>{
     }
     else if (countriesToShow.length > 1 && countriesToShow.length <= 10){
       return (
-        <ul>
+        <div>
           {
-            countriesToShow.map(country=> <li key={country.name.official}>{country.name.official} (common name: {country.name.common})</li>)
+            countriesToShow.map(country=> 
+            <div key={country.name.official}>
+              <Country country={country}/> 
+            </div>)
           }
-        </ul>
+        </div>
       )
     }
     else if (countriesToShow.length === 1) {
       const country = countriesToShow[0]
-      const keys = Object.keys(country.languages)
-      console.log("keys: ", keys)
-      console.log(country.languages)
+      const singleCountry = true
+      
       return (
-        <div>
-          <h2>{country.name.official}</h2>
-          <p>The capital: {country.capital}</p>
-          <p>Total area: {country.area}</p>
-          <h3>Languages:</h3>
-          <ul>
-            {keys.map(
-              key => 
-              <li key={key}>{country.languages[key]}</li>
-            )}  
-
-          </ul>
-          <div>
-            <img src={country.flags.png} alt={country.name.official}/>
-          </div>
-        </div>
+        <Country country={country} singleCountry={singleCountry}/>
       )
+    }
+    else if (countriesToShow.length === 0){
+      return(
+      <div>
+        There is no result, try to change your search word
+      </div>)
     }
   }
   return (
@@ -86,7 +124,7 @@ const [filterName, setFilterName] = useState("")
   useEffect(hook, [])
 
   const handleFilterChange = (event) => {
-    console.log('filter changed to ', event.target.value)
+    //console.log('filter changed to ', event.target.value)
     setFilterName(event.target.value)
   }
 
