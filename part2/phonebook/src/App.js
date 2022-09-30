@@ -21,13 +21,11 @@ const App = () => {
 
 
   const hook = () => {
-
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-
-        setPersons(response.data)
-      })
+    personService
+    .getAll()
+    .then(initialPersons => {
+      setPersons(initialPersons)
+    })
   }
   useEffect(hook, [])
 
@@ -36,7 +34,6 @@ const App = () => {
     console.log('button clicked', event.target)
      
     const newPerson = {
-      //id: persons.length + 1,
       name: newName,
       number: newNumber
     }
@@ -45,23 +42,25 @@ const App = () => {
     
     const nameAlreadyExists = personsNames.includes(newName.toLowerCase())
     console.log('Name already exists', nameAlreadyExists)
-
-    if (nameAlreadyExists) {
-      alert(`${newName} is already added to the phonebook`)
-    } 
-    else if (!newNumber) {
+    if (!newNumber) {
       alert(`Number field is empty`)
     }
+    else if (nameAlreadyExists) {
+      if (window.confirm(`${newName} is already added to the phonebook, do you want the number to be updated with the new one?`)){
+        const currentPersonId = persons.find(person => person.name.toLowerCase() === newPerson.name.toLowerCase()).id
+        //console.log(currentPersonId)
+        personService
+        .updateNumber(currentPersonId, newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.map(p => p.id !== currentPersonId ? p : returnedPerson))
+          setNewNumber('')
+          setNewName('')
+          console.log(`The number for ${newName} was updated`)
+        })
+      }
+    } 
+    
     else {
-      // axios.post('http://localhost:3001/persons', newPerson)
-      // .then(response => {
-      //   setPersons(persons.concat(response.data))
-      //   console.log(`new person added to the server ${response.data}`)
-      //   setNewNumber('')
-      //   setNewName('')
-      //   setShowAll(true)
-      //   setFilterName('')
-      // })
       personService
       .addPerson(newPerson)
       .then(returnedPersons => {
@@ -70,7 +69,6 @@ const App = () => {
         resetFields()
       })
     }
-    
   }
 
   const handleNameChange = (event) => {
@@ -89,7 +87,6 @@ const App = () => {
     if (filterName.length === 0) { 
       setShowAll(false)
     }
-
   }
   const handleResetSearch = (event) =>{
     setShowAll(true)
@@ -100,17 +97,15 @@ const App = () => {
     const personToBeRemoved = persons.find(p => p.id === id).name
     console.log(`person to be removed - ${personToBeRemoved}`)
     if (window.confirm(`Do you really want to remove ${personToBeRemoved} from the contacts?`)){
-      console.log(id)
+      //console.log(id)
       personService
       .removePerson(id)
       .then(() => {
         setPersons(persons.filter (person => person.id !== id))
         console.log(`person with id ${id} was removed`)
-        resetFields()
-        
+        resetFields()  
       })
-    }
-    
+    } 
   }
 
   return (

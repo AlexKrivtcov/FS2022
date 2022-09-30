@@ -21,7 +21,7 @@ const PersonForm = ({addName, handleNameChange, newName, newNumber, handleNumber
               type="tel"/>
           </div>
           <div>
-            <button type="submit" disabled={Boolean(!newName)} >add</button>
+            <button type="submit" disabled={Boolean(!newName || !newNumber)} >add</button>
           </div>
         </form>
     )
