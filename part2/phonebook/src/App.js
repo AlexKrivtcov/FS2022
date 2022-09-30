@@ -33,7 +33,7 @@ const App = () => {
       number: newNumber
     }
     const personsNames = persons.map(person => person.name.toLowerCase())
-    console.log('list of names', personsNames)
+    //console.log('list of names', personsNames)
     
     const nameAlreadyExists = personsNames.includes(newName.toLowerCase())
     console.log('Name already exists', nameAlreadyExists)
@@ -45,6 +45,15 @@ const App = () => {
       alert(`Number field is empty`)
     }
     else {
+      // axios.post('http://localhost:3001/persons', newPerson)
+      // .then(response => {
+      //   setPersons(persons.concat(response.data))
+      //   console.log(`new person added to the server ${response.data}`)
+      //   setNewNumber('')
+      //   setNewName('')
+      //   setShowAll(true)
+      //   setFilterName('')
+      // })
       personService
       .addPerson(newPerson)
       .then(returnedPersons => {
