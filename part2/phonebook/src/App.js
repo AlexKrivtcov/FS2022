@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -27,7 +28,7 @@ const App = () => {
     console.log('button clicked', event.target)
      
     const newPerson = {
-      id: persons.length + 1,
+      //id: persons.length + 1,
       name: newName,
       number: newNumber
     }
@@ -44,31 +45,31 @@ const App = () => {
       alert(`Number field is empty`)
     }
     else {
-      //console.log(newPerson, 'was added to the contacts');
-      console.log(newName, 'was added to the contacts with phone #', newNumber);
-      setPersons(persons.concat(newPerson))
-      setNewNumber('')
-      setNewName('')
-      // show only added contact
-      // setFilterName(newName)
-      // setShowAll(false)
-      setShowAll(true)
-      setFilterName('')
+      personService
+      .addPerson(newPerson)
+      .then(returnedPersons => {
+        setPersons(persons.concat(returnedPersons))
+        console.log(`new person added to the server ${returnedPersons}`)
+        setNewNumber('')
+        setNewName('')
+        setShowAll(true)
+        setFilterName('')
+      })
     }
     
   }
 
   const handleNameChange = (event) => {
-    console.log('name changed to ', event.target.value)
+    //console.log('name changed to ', event.target.value)
     setNewName(event.target.value)
   }
   const handleNumberChange = (event) => {
-    console.log('number changed to ', event.target.value)
+    //console.log('number changed to ', event.target.value)
     setNewNumber(event.target.value)
   }
 
   const handleFilterChange = (event) => {
-    console.log('filter changed to ', event.target.value)
+    //console.log('filter changed to ', event.target.value)
     setFilterName(event.target.value)
 
     if (filterName.length === 0) { 
