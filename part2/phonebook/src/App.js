@@ -12,6 +12,14 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
   const [filterName, setFilterName] = useState('')
 
+  const resetFields = () => {
+    setNewNumber('')
+    setNewName('')
+    setShowAll(true)
+    setFilterName('')
+  }
+
+
   const hook = () => {
 
     axios
@@ -58,11 +66,8 @@ const App = () => {
       .addPerson(newPerson)
       .then(returnedPersons => {
         setPersons(persons.concat(returnedPersons))
-        console.log(`new person added to the server ${returnedPersons}`)
-        setNewNumber('')
-        setNewName('')
-        setShowAll(true)
-        setFilterName('')
+        console.log(`"${returnedPersons.name}" added to the server database`)
+        resetFields()
       })
     }
     
@@ -91,6 +96,23 @@ const App = () => {
     setFilterName('')
   }
 
+  const handleRemove = (id) => {
+    const personToBeRemoved = persons.find(p => p.id === id).name
+    console.log(`person to be removed - ${personToBeRemoved}`)
+    if (window.confirm(`Do you really want to remove ${personToBeRemoved} from the contacts?`)){
+      console.log(id)
+      personService
+      .removePerson(id)
+      .then(() => {
+        setPersons(persons.filter (person => person.id !== id))
+        console.log(`person with id ${id} was removed`)
+        resetFields()
+        
+      })
+    }
+    
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -104,7 +126,10 @@ const App = () => {
         newNumber={newNumber}
         addName={addName}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} showAll={showAll} filterName={filterName}/>
+      <Persons persons={persons} 
+              showAll={showAll} 
+              filterName={filterName} 
+              handleRemove={handleRemove}/>
     </div>
     
   )
