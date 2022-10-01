@@ -26,9 +26,29 @@
       "id": 6
     },
     {
-      "name": "Tom",
-      "number": "12 42 3555",
-      "id": 7
+      "name": "Victoria Romeo",
+      "number": "89 98 9666",
+      "id": 9
+    },
+    {
+      "name": "Richard",
+      "number": "36 63 3222",
+      "id": 10
+    },
+    {
+      "name": "Victor",
+      "number": "123123123",
+      "id": 11
+    },
+    {
+      "name": "Someone new",
+      "number": "234 234233",
+      "id": 12
+    },
+    {
+      "name": "Samantha",
+      "number": "58 555 8885",
+      "id": 13
     }
   ]
 }

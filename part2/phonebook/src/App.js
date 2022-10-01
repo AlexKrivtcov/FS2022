@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import Message from './components/Message'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,12 +12,18 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [filterName, setFilterName] = useState('')
+  const [messageToDisplay, setMessageToDisplay] = useState({message:null})
 
   const resetFields = () => {
     setNewNumber('')
     setNewName('')
     setShowAll(true)
     setFilterName('')
+  }
+  const hideMessage = () => {
+    setTimeout(() => {
+        setMessageToDisplay({message:null, status: null})
+      }, 5000)
   }
 
 
@@ -56,6 +63,21 @@ const App = () => {
           setNewNumber('')
           setNewName('')
           console.log(`The number for ${newName} was updated`)
+          setMessageToDisplay({
+            message: `"${newName}'s" number was updated`, 
+            status: false
+          })
+          hideMessage()
+        })
+        .catch(error => {
+          setMessageToDisplay({
+            message:`Unfortunately "${newName}" has already been removed from the server`, 
+            status: true
+          })
+          console.log(`Unfortunately "${newName}" has already been removed from the server`)
+          setPersons(persons.filter(p => p.id !== currentPersonId))
+          resetFields()
+          hideMessage()
         })
       }
     } 
@@ -67,6 +89,11 @@ const App = () => {
         setPersons(persons.concat(returnedPersons))
         console.log(`"${returnedPersons.name}" added to the server database`)
         resetFields()
+        setMessageToDisplay({
+          message: `"${returnedPersons.name}" added to the server database`, 
+          status: false
+        })
+        hideMessage()
       })
     }
   }
@@ -102,8 +129,23 @@ const App = () => {
       .removePerson(id)
       .then(() => {
         setPersons(persons.filter (person => person.id !== id))
-        console.log(`person with id ${id} was removed`)
+        console.log(`${personToBeRemoved} is removed from the list`)
+        setMessageToDisplay({
+          message: `${personToBeRemoved} is removed from the list`, 
+          status: false
+        })
+        hideMessage()
         resetFields()  
+      })
+      .catch(error => {
+        setMessageToDisplay({
+          message:`"${personToBeRemoved}" has already been removed from the server`, 
+          status: true
+        })
+        console.log(`"${personToBeRemoved}" has already been removed from the server`)
+        setPersons(persons.filter(p => p.id !== id))
+        resetFields()
+        hideMessage()
       })
     } 
   }
@@ -111,6 +153,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message notification={messageToDisplay}/>
       <Filter handleFilterChange={handleFilterChange}
         handleResetSearch={handleResetSearch}
         filterName={filterName}/>
