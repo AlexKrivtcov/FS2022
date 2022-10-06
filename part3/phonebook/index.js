@@ -23,15 +23,34 @@ let persons = [
         "number": "39-23-6423122"
       }
 ]
+
+const info = () => {
+    const personsTotal = persons.length > 0 ? persons.length : 0
+    const currentDate = new Date()
+    return(
+        `<div>
+            <p>Phonebook has info for ${personsTotal} people</p>
+            <p>${currentDate}</p>
+        </div>`
+    )
+}
+
 app.get('/', (request, response) => {
     response.send('<h1>Welcome to Phonebook!</h1>')
   })
   
-  app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response) => {
     response.json(persons)
-  })
-  
-  const PORT = 3001
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-  })
+})
+app.get('/info', (request, response) => {
+
+    response.send(info())
+})
+
+
+
+
+const PORT = 3001
+app.listen(PORT, () => {
+console.log(`Server running on port ${PORT}`)
+})
