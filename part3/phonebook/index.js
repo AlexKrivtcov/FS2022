@@ -46,7 +46,17 @@ app.get('/info', (request, response) => {
 
     response.send(info())
 })
-
+app.get('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    console.log(id)
+    const person = persons.find(person => person.id === id)
+    console.log(person)
+    if (person) {
+        response.json(person)
+      } else {
+        response.status(404).send(`Sorry, The person with the ID <strong>${id}</strong> doesn't exist`).end()
+      }
+  })
 
 
 
