@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 app.use(express.json())
+
 
 let persons = [
     { 
@@ -41,6 +43,8 @@ const info = () => {
         </div>`
     )
 }
+
+app.use(morgan('tiny'))
 
 app.get('/', (request, response) => {
     response.send('<h1>Welcome to Phonebook!</h1>')
@@ -88,11 +92,11 @@ app.post('/api/persons/', (request, response) => {
         return response.status(400).json({ 
             error: 'Name must be unique' 
         })
-    }  
+    }
     
       const person = {
         name: body.name,
-        number: body.number, 
+        number: body.number,
         id: generateId(),
       }
     
@@ -100,7 +104,7 @@ app.post('/api/persons/', (request, response) => {
     
       response.json(person)
   })
-
+  
 
 const PORT = 3001
 app.listen(PORT, () => {
