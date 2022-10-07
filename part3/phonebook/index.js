@@ -1,9 +1,19 @@
 const express = require('express')
-const app = express()
 const morgan = require('morgan')
+const app = express()
+
 app.use(express.json())
 
 
+
+morgan.token('profile', function getData(request, response) {
+    if (request.method === "POST" ) {
+        return JSON.stringify(request.body)
+    } 
+    return " "
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :profile'))
+// app.use(morgan(':profile'))
 let persons = [
     { 
         "id": 1,
@@ -29,7 +39,7 @@ let persons = [
 
 const generateId = () => {
     const randomId = Math.floor(Math.random()*1000000)
-    console.log(randomId)
+    //console.log(randomId)
     return randomId
 }
 
@@ -41,10 +51,10 @@ const info = () => {
             <p>Phonebook has info for ${personsTotal} people</p>
             <p>${currentDate}</p>
         </div>`
-    )
+    ) 
 }
 
-app.use(morgan('tiny'))
+
 
 app.get('/', (request, response) => {
     response.send('<h1>Welcome to Phonebook!</h1>')
@@ -61,7 +71,7 @@ app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     //console.log(id)
     const person = persons.find(person => person.id === id)
-    console.log(person)
+    //console.log(person)
     if (person) {
         response.json(person)
     } else {
@@ -75,7 +85,7 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
-app.post('/api/persons/', (request, response) => {
+app.post('/api/persons', (request, response) => {
     const body = request.body
 
     if (!body.name) {
