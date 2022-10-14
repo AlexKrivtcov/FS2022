@@ -1,8 +1,8 @@
-require('dotenv').config()
-
 const express = require('express')
 const app = express()
 const cors = require('cors')
+require('dotenv').config()
+
 const Person = require('./models/person')
 
 
@@ -61,7 +61,7 @@ app.get('/api/persons/:id', (request, response) => {
     })
 
 })
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
         .then(result =>{
             response.status(204).end()
@@ -81,13 +81,7 @@ app.post('/api/persons', (request, response) => {
         return response.status(400).json({ 
             error: 'Number is missing' 
         })
-    }
-    // else if (persons.find(person => person.name == body.name)) {
-    //     return response.status(400).json({ 
-    //         error: 'Name must be unique' 
-    //     })
-    // }
-    
+    } 
       const person = new Person ({
         name: body.name,
         number: body.number,
@@ -96,7 +90,25 @@ app.post('/api/persons', (request, response) => {
         response.json(savedPerson)
       }) 
   })
+
+  const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+  }
   
+  app.use(unknownEndpoint)
+
+  const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+  
+    if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformatted id' })
+    } 
+  
+    next(error)
+  }
+  
+  // this has to be the last loaded middleware.
+  app.use(errorHandler)
 
   const PORT = process.env.PORT 
   app.listen(PORT, () => {
