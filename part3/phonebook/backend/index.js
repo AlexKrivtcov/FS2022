@@ -5,7 +5,7 @@ require('dotenv').config()
 
 const Person = require('./models/person')
 
-
+//Serving static files from the backend
 app.use(express.static('build'))
 app.use(express.json())
 const morgan = require('morgan')
@@ -48,15 +48,16 @@ app.get('/info', (request, response) => {
     })
 })
 
-app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
+app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id).then(person => {
-        response.json(person)
+        if (person){
+            response.json(person)
+        }
+        else {
+            response.status(404).send(`Sorry, The person with the ID <strong>${request.params.id}</strong> doesn't exist`)
+        }
     })
-    .catch(error => {
-        console.log(error)
-        response.status(404).send(`Sorry, The person with the ID <strong>${id}</strong> doesn't exist`)
-    })
+    .catch(error => next(error))
 
 })
 app.delete('/api/persons/:id', (request, response, next) => {

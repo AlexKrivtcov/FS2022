@@ -13,7 +13,7 @@ GET http://localhost:3001/api/persons/634726c3bc5a83a7b678500f
 
 ###
 
-DELETE http://localhost:3001/api/persons/6349d050330a2dd8768f8100
+DELETE http://localhost:3001/api/persons/6349cfc64843093b43544c1e
 
 ###
 
@@ -27,10 +27,9 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3001/api/persons/6349d050330a2dd8768f8199
+PUT http://localhost:3001/api/persons/6349d8e7a8af97087c6c6805
 Content-Type: application/json
 
 {
-    "name": "roberto",
-    "number": "11-11-1111"
+    "number": "78-87-9669"
 }
