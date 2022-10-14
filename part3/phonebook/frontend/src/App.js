@@ -52,36 +52,36 @@ const App = () => {
     if (!newNumber) {
       alert(`Number field is empty`)
     }
-    //!!!!Not allow users to create entries with the same names!!!
-    // else if (nameAlreadyExists) {
-    //   if (window.confirm(`${newName} is already added to the phonebook, do you want the number to be updated with the new one?`)){
-    //     const currentPersonId = persons.find(person => person.name.toLowerCase() === newPerson.name.toLowerCase()).id
-    //     //console.log(currentPersonId)
-    //     personService
-    //     .updateNumber(currentPersonId, newPerson)
-    //     .then(returnedPerson => {
-    //       setPersons(persons.map(p => p.id !== currentPersonId ? p : returnedPerson))
-    //       setNewNumber('')
-    //       setNewName('')
-    //       console.log(`The number for ${newName} was updated`)
-    //       setMessageToDisplay({
-    //         message: `"${newName}'s" number was updated`, 
-    //         status: false
-    //       })
-    //       hideMessage()
-    //     })
-    //     .catch(error => {
-    //       setMessageToDisplay({
-    //         message:`Unfortunately "${newName}" has already been removed from the server`, 
-    //         status: true
-    //       })
-    //       console.log(`Unfortunately "${newName}" has already been removed from the server`)
-    //       setPersons(persons.filter(p => p.id !== currentPersonId))
-    //       resetFields()
-    //       hideMessage()
-    //     })
-    //   }
-    // } 
+
+    else if (nameAlreadyExists) {
+      if (window.confirm(`${newName} is already added to the phonebook, do you want the number to be updated with the new one?`)){
+        const currentPersonId = persons.find(person => person.name.toLowerCase() === newPerson.name.toLowerCase()).id
+        //console.log(currentPersonId)
+        personService
+        .updateNumber(currentPersonId, newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.map(p => p.id !== currentPersonId ? p : returnedPerson))
+          setNewNumber('')
+          setNewName('')
+          console.log(`The number for ${newName} was updated`)
+          setMessageToDisplay({
+            message: `"${newName}'s" number was updated`, 
+            status: false
+          })
+          hideMessage()
+        })
+        .catch(error => {
+          setMessageToDisplay({
+            message:`Unfortunately "${newName}" has already been removed from the server`, 
+            status: true
+          })
+          console.log(`Unfortunately "${newName}" has already been removed from the server`)
+          setPersons(persons.filter(p => p.id !== currentPersonId))
+          resetFields()
+          hideMessage()
+        })
+      }
+    } 
     
     else {
       personService

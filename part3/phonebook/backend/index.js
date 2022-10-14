@@ -31,8 +31,6 @@ const info = (count) => {
     ) 
 }
 
-
-
 app.get('/', (request, response) => {
     response.send('<h1>Welcome to Phonebook!</h1>')
   })
@@ -82,35 +80,52 @@ app.post('/api/persons', (request, response) => {
             error: 'Number is missing' 
         })
     } 
-      const person = new Person ({
+    const person = new Person ({
         name: body.name,
         number: body.number,
-      })
-      person.save().then(savedPerson => {
+    })
+    person.save().then(savedPerson => {
         response.json(savedPerson)
-      }) 
-  })
+    }) 
+})
+app.put('/api/persons/:id', (request, response, next) => {
+    const body = request.body
+    const person = {
+        number: body.number,
+    }
+    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedContact => {
+        if (!updatedContact){
+            return response.status(400).json({ 
+                error: 'No such contact' })
+        }
+        else {
+            return response.json(updatedContact)
+        }
+    })
+    .catch(error => next(error))
+})
 
-  const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
-  }
+const unknownEndpoint = (request, response) => {
+response.status(404).send({ error: 'unknown endpoint' })
+}
   
-  app.use(unknownEndpoint)
+app.use(unknownEndpoint)
 
-  const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
-  
-    if (error.name === 'CastError') {
-      return response.status(400).send({ error: 'malformatted id' })
-    } 
-  
-    next(error)
-  }
-  
-  // this has to be the last loaded middleware.
-  app.use(errorHandler)
+const errorHandler = (error, request, response, next) => {
+console.error(error.message)
 
-  const PORT = process.env.PORT 
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-  })
+if (error.name === 'CastError') {
+    return response.status(400).json({ error: 'malformatted id' })
+} 
+
+next(error)
+}
+  
+// this has to be the last loaded middleware.
+app.use(errorHandler)
+
+const PORT = process.env.PORT 
+app.listen(PORT, () => {
+console.log(`Server running on port ${PORT}`)
+})
