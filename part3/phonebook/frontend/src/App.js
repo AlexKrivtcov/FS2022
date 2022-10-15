@@ -49,11 +49,7 @@ const App = () => {
     
     const nameAlreadyExists = personsNames.includes(newName.toLowerCase())
     //console.log('Name already exists', nameAlreadyExists)
-    if (!newNumber) {
-      alert(`Number field is empty`)
-    }
-
-    else if (nameAlreadyExists) {
+    if (nameAlreadyExists) {
       if (window.confirm(`${newName} is already added to the phonebook, do you want the number to be updated with the new one?`)){
         const currentPersonId = persons.find(person => person.name.toLowerCase() === newPerson.name.toLowerCase()).id
         //console.log(currentPersonId)
@@ -63,7 +59,7 @@ const App = () => {
           setPersons(persons.map(p => p.id !== currentPersonId ? p : returnedPerson))
           setNewNumber('')
           setNewName('')
-          console.log(`The number for ${newName} was updated`)
+          //console.log(`The number for ${newName} was updated`)
           setMessageToDisplay({
             message: `"${newName}'s" number was updated`, 
             status: false
@@ -72,12 +68,9 @@ const App = () => {
         })
         .catch(error => {
           setMessageToDisplay({
-            message:`Unfortunately "${newName}" has already been removed from the server`, 
+            message: `${error.response.data.error}`, 
             status: true
           })
-          console.log(`Unfortunately "${newName}" has already been removed from the server`)
-          setPersons(persons.filter(p => p.id !== currentPersonId))
-          resetFields()
           hideMessage()
         })
       }
@@ -95,6 +88,14 @@ const App = () => {
           status: false
         })
         hideMessage()
+      })
+      .catch(error => {
+        setMessageToDisplay({
+          message: `${error.response.data.error}`, 
+          status: true
+        })
+        hideMessage()
+        console.log(error.response.data.error)
       })
     }
   }
@@ -143,7 +144,6 @@ const App = () => {
           message:`"${personToBeRemoved}" has already been removed from the server`, 
           status: true
         })
-        console.log(`"${personToBeRemoved}" has already been removed from the server`)
         setPersons(persons.filter(p => p.id !== id))
         resetFields()
         hideMessage()
