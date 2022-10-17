@@ -27,9 +27,10 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3001/api/persons/6349f1a1b2aa66277d4f290f
+PUT http://localhost:3001/api/persons/
 Content-Type: application/json
 
 {
-    "number": "78-87-77"
+
+    "number": "788-7777"
 }
