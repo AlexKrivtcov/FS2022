@@ -19,35 +19,35 @@ const personSchema = new mongoose.Schema({
 const Person = mongoose.model('Person', personSchema)
 
 if (name && password) {
-    mongoose
+  mongoose
     .connect(url)
     .then(() => {
-        if (name && password){
-            const person = new Person({
-                name: name,
-                number: number,
-            })
-            console.log(`added ${person.name} number ${person.number} to phonebook`)
-            return person.save()
-        }
+      if (name && password){
+        const person = new Person({
+          name: name,
+          number: number,
+        })
+        console.log(`added ${person.name} number ${person.number} to phonebook`)
+        return person.save()
+      }
     })
     .then(() => {
-        console.log('connection closed!')
-        return mongoose.connection.close()
+      console.log('connection closed!')
+      return mongoose.connection.close()
     })
     .catch((err) => console.log(err))
 } else {
-    mongoose
+  mongoose
     .connect(url)
     .then(() => {
-        Person.find({}).then(result => {
-            console.log("phonebook:")
-            result.forEach(person => {
-            console.log(`${person.name} ${person.number}`)
-            })
-            mongoose.connection.close()
-            console.log('END connection closed!')
+      Person.find({}).then(result => {
+        console.log('phonebook:')
+        result.forEach(person => {
+          console.log(`${person.name} ${person.number}`)
         })
+        mongoose.connection.close()
+        console.log('END connection closed!')
+      })
     })
-  .catch((err) => console.log(err))
+    .catch((err) => console.log(err))
 }
