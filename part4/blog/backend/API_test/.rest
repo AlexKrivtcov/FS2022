@@ -1,0 +1,15 @@
+//get all
+GET http://localhost:3003/api/blogs
+
+###
+
+//post a new blog
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Candied Pear Chips",
+  "author": "CARISSA ERZEN",
+  "url": "https://food52.com/recipes/84298-candied-pear-chips",
+  "likes": 0
+}
