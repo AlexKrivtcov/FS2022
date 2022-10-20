@@ -1,12 +1,18 @@
-const dummy = (blogs) => {
-  const reducer = (sum, item) => {
-    return sum + item
-  }
+const logger = require('./logger')
+const dummy = () => {
 
-  //return blogs.reduce(reducer, 0) / blogs.length
   return 1
 }
 
+const totalLikes = (blogs) => {
+  const reducer = (sum, item) => {
+    //logger.info(`Likes ----- ${item.likes}`)
+    return sum + item.likes
+  }
+  return blogs.reduce(reducer, 0)
+}
+
 module.exports = {
-  dummy
+  dummy,
+  totalLikes
 }
