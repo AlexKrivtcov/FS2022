@@ -60,15 +60,10 @@ const blogs = [
 ]
 const emptyArray = []
 
-const mostPopular = {
-  title: 'Go To Statement Considered Harmful',
-  author: 'Edsger W. Dijkstra',
-  likes: 15
-}
+
 
 module.exports = {
   listWithOneBlog,
   blogs,
-  emptyArray,
-  mostPopular
+  emptyArray
 }
