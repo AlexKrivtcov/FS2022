@@ -37,6 +37,14 @@ test('a specific blog\'s title is within the returned blogs', async () => {
   expect(titles).toContain('React patterns')
 })
 
+test('unique identifier is id not _id', async () => {
+  const blogs = await helper.blogsInDb()
+
+  expect(blogs.map(b => b.id)).toBeDefined()
+
+  expect(blogs[0]._id).toBeUndefined()
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
