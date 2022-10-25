@@ -60,13 +60,29 @@ test('a valid blog can be added ', async () => {
     .expect('Content-Type', /application\/json/)
 
   const blogsAtEnd = await helper.blogsInDb()
-  console.log(blogsAtEnd)
+  //console.log(blogsAtEnd)
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
   const titles = blogsAtEnd.map(n => n.title)
   expect(titles).toContain(
     'Type wars'
   )
+})
+
+test('like property is missing', async () => {
+  const newBlog = {
+    title: 'TDD harms architecture',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html'
+  }
+
+  const result = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  expect(result.body.likes).toEqual(0)
 })
 
 
