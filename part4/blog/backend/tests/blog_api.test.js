@@ -45,6 +45,31 @@ test('unique identifier is id not _id', async () => {
   expect(blogs[0]._id).toBeUndefined()
 })
 
+test('a valid blog can be added ', async () => {
+  const newBlog = {
+    title: 'Type wars',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    likes: 2,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  console.log(blogsAtEnd)
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  const titles = blogsAtEnd.map(n => n.title)
+  expect(titles).toContain(
+    'Type wars'
+  )
+})
+
+
 afterAll(() => {
   mongoose.connection.close()
 })
