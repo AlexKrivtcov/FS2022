@@ -33,3 +33,22 @@ Content-Type: application/json
 {
   "likes": 0
 }
+
+###
+
+//USERS
+
+//get all users
+GET http://localhost:3003/api/users
+
+###
+
+//add a new user
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "Tom",
+  "name": "Tom",
+  "password": "TomD"
+}
