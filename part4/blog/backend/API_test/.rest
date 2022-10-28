@@ -13,25 +13,26 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Candied Pear Chips3",
+  "title": "Candied Pear",
   "author": "CARISSA ERZEN",
   "url": "https://food52.com/recipes/84298-candied-pear-chips",
-  "likes": 0
+  "likes": 0,
+  "userId": "635b240687f23ac48353930b"
 }
 
 ###
 
 //Delete blog
-DELETE http://localhost:3003/api/blogs/6351a8c1a7d0bd231bbfce81
+DELETE http://localhost:3003/api/blogs/635c35e6aed9701096e7dcf7
 
 ###
 
 // Change likes
-PUT http://localhost:3003/api/blogs/6359961fe5dac4b7e7fb2d82
+PUT http://localhost:3003/api/blogs/635c2c4031f5fc41fabde697
 Content-Type: application/json
 
 {
-  "likes": 0
+  "likes": 10
 }
 
 ###
@@ -48,7 +49,7 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-
+  "username": "T",
   "name": "Tom",
   "password": "TomD"
 }
