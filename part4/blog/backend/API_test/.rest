@@ -11,19 +11,19 @@ GET http://localhost:3003/api/blogs/45
 //post a new blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRvbSIsImlkIjoiNjM1YjI0MDY4N2YyM2FjNDgzNTM5MzBiIiwiaWF0IjoxNjY2OTg4NzQ5fQ.ZX3puTbCkNc2guldCJSoHK8f4OyUcckUxtDOWDjIkSY
 
 {
-  "title": "Candied Pear",
+  "title": "Candy",
   "author": "CARISSA ERZEN",
   "url": "https://food52.com/recipes/84298-candied-pear-chips",
-  "likes": 0,
-  "userId": "635b240687f23ac48353930b"
+  "likes": 0
 }
 
 ###
 
 //Delete blog
-DELETE http://localhost:3003/api/blogs/635c35e6aed9701096e7dcf7
+DELETE http://localhost:3003/api/blogs/635c3aec2271e81a5dd0378d
 
 ###
 
@@ -49,7 +49,17 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "username": "T",
+  "username": "Tom",
   "name": "Tom",
+  "password": "TomD"
+}
+
+###
+//login
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "Tom",
   "password": "TomD"
 }
