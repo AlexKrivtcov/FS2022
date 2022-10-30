@@ -4,6 +4,7 @@ const app = require('../app')
 const helper = require('./test_helper')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 const api = supertest(app)
 
@@ -80,6 +81,18 @@ describe('deleting a blog', () => {
 })
 
 describe('add a new blog', () => {
+  let user = undefined
+  let userToken = undefined
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    user = new User({ username: 'root', passwordHash })
+
+    await user.save()
+    userToken = jwt.sign({ id: user._id }, process.env.SECRET)
+  })
+
   test('a valid blog can be added ', async () => {
     const newBlog = {
       title: 'Type wars',
@@ -90,6 +103,7 @@ describe('add a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('authorization',`bearer ${userToken}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -112,6 +126,7 @@ describe('add a new blog', () => {
 
     const result = await api
       .post('/api/blogs')
+      .set('authorization',`bearer ${userToken}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -125,8 +140,26 @@ describe('add a new blog', () => {
     }
     await api
       .post('/api/blogs')
+      .set('authorization',`bearer ${userToken}`)
       .send(newBlog)
       .expect(400)
+
+    const response = await api.get('/api/blogs')
+
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
+  test('adding a blog fails if a token is not provided', async () => {
+    const newBlog = {
+      title: 'Type wars',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+      likes: 2,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
 
     const response = await api.get('/api/blogs')
 
