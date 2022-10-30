@@ -23,17 +23,17 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRvb
 ###
 
 //Delete blog
-DELETE http://localhost:3003/api/blogs/635c2ca131f5fc41fabde6a7
+DELETE http://localhost:3003/api/blogs/635df47971d5c8b9e5e03e3e
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRvbSIsImlkIjoiNjM1YjI0MDY4N2YyM2FjNDgzNTM5MzBiIiwiaWF0IjoxNjY3MDkyMjEyfQ.P6IL5oahGYq4Xl3A2Y1OEXj8psCf5AKKxw975nSY678
 
 ###
 
 // Change likes
-PUT http://localhost:3003/api/blogs/635c2c4031f5fc41fabde697
+PUT http://localhost:3003/api/blogs/635c38080ef0a2863603e89d
 Content-Type: application/json
 
 {
-  "likes": 10
+  "likes": 7
 }
 
 ###
